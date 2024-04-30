@@ -3,7 +3,6 @@ import {
   Keypair,
   SystemProgram,
   Transaction,
-  clusterApiUrl,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
 import {
@@ -12,25 +11,29 @@ import {
   createInitializeMintInstruction,
   getMintLen,
   createInitializeMetadataPointerInstruction,
-  getMint,
-  getMetadataPointerState,
-  getTokenMetadata,
   TYPE_SIZE,
   LENGTH_SIZE,
-  mintTo,
 } from "@solana/spl-token";
 import {
   createInitializeInstruction,
-  createUpdateFieldInstruction,
-  createRemoveKeyInstruction,
   pack,
   TokenMetadata,
 } from "@solana/spl-token-metadata";
 import { getConnection, getOrCreateAccount } from "./utils/web3";
+import { decimals } from "./config";
+
+let connection: Connection;
+let payerAccount: Keypair;
+let mintAccount: Keypair;
+
+const init = async () => {
+  connection = await getConnection();
+  payerAccount = await getOrCreateAccount("payerAccount");
+  mintAccount = await getOrCreateAccount("mintAccount");
+};
 
 const main = async () => {
-  const payer = await getOrCreateAccount("payerAccount");
-  const connection = getConnection();
+  await init();
 
   // Transaction to send
   let transaction: Transaction;
@@ -38,29 +41,25 @@ const main = async () => {
   // Transaction signature returned from sent transaction
   let transactionSignature: string;
 
-  // Create a token account
-  const mintKeypair = await getOrCreateAccount("mintAccount");
-  const ownerAccount = await getOrCreateAccount("payerAccount"); // await getOrCreateAccount("ownerAccount");
-
   // Address for Mint Account
-  const mint = mintKeypair.publicKey;
-  // Decimals for Mint Account
-  const decimals = 4;
+  const mint = mintAccount.publicKey;
 
   // Authority that can mint new tokens
-  const mintAuthority = ownerAccount.publicKey; // owner
+  const mintAuthority = payerAccount.publicKey; // owner
   // Authority that can update the metadata pointer and token metadata
-  const updateAuthority = ownerAccount.publicKey;
+  const updateAuthority = payerAccount.publicKey;
 
   // Metadata to store in Mint Account
   const metaData: TokenMetadata = {
     updateAuthority: updateAuthority,
-    mint: mint,
+    mint,
     name: "Godzilla Cat",
     symbol: "godCat",
-    uri: "https://plum-worthwhile-limpet-629.mypinata.cloud/ipfs/QmSGXHaBHJfENJfNmXtHW7jCc8UHK2nx7xrb3h19HUAcqz",
+    uri: "https://plum-worthwhile-limpet-629.mypinata.cloud/ipfs/QmPT7WbaEPbrELoP6Yafs1ZEtDjgcG4izY7iJiBoYMmpFc",
     additionalMetadata: [
-      ["description", "The Next Meme Coin Leader On Solana"],
+      ["website", "https://godzillacat.lol"],
+      ["twitter", "https://twitter.com/GodzillaCatSol"],
+      ["telegram", "https://t.me/GodzillaCatSol"],
     ],
   };
 
@@ -78,7 +77,7 @@ const main = async () => {
 
   // Instruction to invoke System Program to create new account
   const createAccountInstruction = SystemProgram.createAccount({
-    fromPubkey: payer.publicKey, // Account that will transfer lamports to created account
+    fromPubkey: payerAccount.publicKey, // Account that will transfer lamports to created account
     newAccountPubkey: mint, // Address of the account to create
     space: mintLen, // Amount of bytes to allocate to the created account
     lamports, // Amount of lamports transferred to created account
@@ -130,7 +129,7 @@ const main = async () => {
   transactionSignature = await sendAndConfirmTransaction(
     connection,
     transaction,
-    [payer, mintKeypair] // Signers
+    [payerAccount, mintAccount] // Signers
   );
 
   console.log("transactionSignature", transactionSignature);

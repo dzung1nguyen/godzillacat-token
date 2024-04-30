@@ -6,20 +6,19 @@ import {
 } from "@solana/spl-token";
 import { getConnection, getOrCreateAccount } from "./utils/web3";
 import { Connection, Keypair, PublicKey } from "@solana/web3.js";
+import { decimals, totalSupply } from "./config";
 
-let connection:Connection;
-let payerAccount:Keypair;
-let mintAccount:Keypair;
-let ownerAccount:Keypair;
-let sourceTokenAccount:PublicKey;
-const decimals = 4;
-const amount = Math.pow(10, decimals + 10);
-const totalToken = BigInt(amount);
-const totalPresaleToken = BigInt(amount * 0.5);
-const totalLiquidityToken = BigInt(amount * 0.3);
-const totalAirdropToken = BigInt(amount * 0.1);
-const totalTeamToken = BigInt(amount * 0.05);
-const totalmarketingToken = BigInt(amount * 0.05);
+let connection: Connection;
+let payerAccount: Keypair;
+let mintAccount: Keypair;
+let ownerAccount: Keypair;
+let sourceTokenAccount: PublicKey;
+const totalToken = BigInt(totalSupply);
+const totalPresaleToken = BigInt(totalSupply * 0.5);
+const totalLiquidityToken = BigInt(totalSupply * 0.3);
+const totalAirdropToken = BigInt(totalSupply * 0.1);
+const totalTeamToken = BigInt(totalSupply * 0.05);
+const totalmarketingToken = BigInt(totalSupply * 0.05);
 
 const init = async () => {
   connection = await getConnection();
