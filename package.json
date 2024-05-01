@@ -9,7 +9,7 @@
     "balance": "ts-node ./src/balance.ts",
     "mint": "ts-node ./src/mint.ts",
     "getMint": "ts-node ./src/getMint.ts",
-    "createTokenAccount": "ts-node ./src/createTokenAccount.ts",
+    "createTokenAndMint": "ts-node ./src/createTokenAndMint.ts",
     "removeAuthorityMint": "ts-node ./src/removeAuthorityMint.ts"
   },
   "dependencies": {

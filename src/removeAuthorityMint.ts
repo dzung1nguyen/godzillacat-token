@@ -21,7 +21,7 @@ const init = async () => {
 const main = async () => {
   await init();
 
-  let txhash = await setAuthority(
+  const txhash = await setAuthority(
     connection, // connection
     payerAccount, // payer
     mintAccount.publicKey, // mint account || token account
@@ -34,6 +34,23 @@ const main = async () => {
   );
 
   console.log("txhash", txhash);
+
+  // Disable Freeze Account
+  /*
+  let txhash2 = await setAuthority(
+    connection, // connection
+    payerAccount, // payer
+    mintAccount.publicKey, // mint account || token account
+    payerAccount.publicKey, // current authority
+    AuthorityType.FreezeAccount, // authority type
+    null,
+    undefined,
+    undefined,
+    TOKEN_2022_PROGRAM_ID
+  );
+
+  console.log("txhash2", txhash);
+  */
 };
 
 main();

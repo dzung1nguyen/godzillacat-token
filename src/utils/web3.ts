@@ -6,9 +6,10 @@ import {
   PublicKey,
 } from "@solana/web3.js";
 import { readFile, writeFileIfNotExists } from ".";
+import { endpoint } from "../config";
 
-export const getConnection = () => {
-  return new Connection("http://127.0.0.1:8899", "confirmed");
+export const getConnection = async () => {
+  return await new Connection(endpoint, "confirmed");
 };
 
 export const getOrCreateAccount = async (name: string) => {
@@ -40,7 +41,7 @@ export const getOrCreateAccount = async (name: string) => {
 };
 
 export const requestAirdrop = async (publicKey: PublicKey, sol = 10) => {
-  const connection = getConnection();
+  const connection = await getConnection();
 
   const airdropSignature = await connection.requestAirdrop(
     publicKey,
@@ -64,7 +65,7 @@ export const requestAirdrop = async (publicKey: PublicKey, sol = 10) => {
  * @returns
  */
 export const getBalance = async (pubKey: string) => {
-  const connection = getConnection();
+  const connection = await getConnection();
   const balance = await connection.getBalance(new PublicKey(pubKey));
   console.log(`Wallet Balance: ${balance / LAMPORTS_PER_SOL}`);
   return balance;

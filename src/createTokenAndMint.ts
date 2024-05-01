@@ -1,12 +1,15 @@
 import {
   TOKEN_2022_PROGRAM_ID,
   createAccount,
+  createAssociatedTokenAccountIdempotent,
+  getOrCreateAssociatedTokenAccount,
   mintTo,
   transferChecked,
 } from "@solana/spl-token";
 import { getConnection, getOrCreateAccount } from "./utils/web3";
 import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import { decimals, totalSupply } from "./config";
+import { readFile, writeFileIfNotExists } from "./utils";
 
 let connection: Connection;
 let payerAccount: Keypair;
@@ -26,15 +29,27 @@ const init = async () => {
   mintAccount = await getOrCreateAccount("mintAccount");
   ownerAccount = await getOrCreateAccount("payerAccount");
 
-  sourceTokenAccount = await createAccount(
-    connection,
-    payerAccount, // Payer to create Token Account
-    mintAccount.publicKey, // Mint Account address
-    ownerAccount.publicKey, // Token Account owner
-    undefined, // Optional keypair, default to Associated Token Account
-    undefined, // Confirmation options
-    TOKEN_2022_PROGRAM_ID // Token Extension Program ID
-  );
+  console.log("start create sourceTokenAccount");
+
+  const sourceTokenAccountPublicKey = readFile("sourceTokenAccount.json");
+
+  if (sourceTokenAccountPublicKey) {
+    sourceTokenAccount = new PublicKey(sourceTokenAccountPublicKey);
+  } else {
+    sourceTokenAccount = await createAccount(
+      connection,
+      payerAccount, // Payer to create Token Account
+      mintAccount.publicKey, // Mint Account address
+      ownerAccount.publicKey, // Token Account owner
+      undefined, // Optional keypair, default to Associated Token Account
+      undefined, // Confirmation options
+      TOKEN_2022_PROGRAM_ID // Token Extension Program ID
+    );
+    await writeFileIfNotExists(
+      "sourceTokenAccount.json",
+      sourceTokenAccount.toString()
+    );
+  }
 
   console.log("sourceTokenAccount", sourceTokenAccount.toString());
 };
@@ -87,11 +102,11 @@ const main = async () => {
     `transactionSignature (mintTo): ${transactionSignature.toString()}`
   );
 
-  await transfer("presaleAccount", totalPresaleToken);
-  await transfer("liquidityAccount", totalLiquidityToken);
-  await transfer("airdropAccount", totalAirdropToken);
-  await transfer("teamAccount", totalTeamToken);
-  await transfer("marketingAccount", totalmarketingToken);
+  // await transfer("presaleAccount", totalPresaleToken);
+  // await transfer("liquidityAccount", totalLiquidityToken);
+  // await transfer("airdropAccount", totalAirdropToken);
+  // await transfer("teamAccount", totalTeamToken);
+  // await transfer("marketingAccount", totalmarketingToken);
 };
 
 main();

@@ -20,7 +20,7 @@ import {
   TokenMetadata,
 } from "@solana/spl-token-metadata";
 import { getConnection, getOrCreateAccount } from "./utils/web3";
-import { decimals } from "./config";
+import { decimals, metadatURL } from "./config";
 
 let connection: Connection;
 let payerAccount: Keypair;
@@ -55,7 +55,7 @@ const main = async () => {
     mint,
     name: "Godzilla Cat",
     symbol: "godCat",
-    uri: "https://plum-worthwhile-limpet-629.mypinata.cloud/ipfs/QmPT7WbaEPbrELoP6Yafs1ZEtDjgcG4izY7iJiBoYMmpFc",
+    uri: metadatURL,
     additionalMetadata: [
       ["website", "https://godzillacat.lol"],
       ["twitter", "https://twitter.com/GodzillaCatSol"],
@@ -67,6 +67,8 @@ const main = async () => {
 
   const metadataLen = pack(metaData).length;
 
+  console.log('metadataLen', metadataLen);
+
   // Size of Mint Account with extension
   const mintLen = getMintLen([ExtensionType.MetadataPointer]);
 
@@ -74,6 +76,8 @@ const main = async () => {
   const lamports = await connection.getMinimumBalanceForRentExemption(
     mintLen + metadataExtension + metadataLen
   );
+
+  console.log('lamports', lamports);
 
   // Instruction to invoke System Program to create new account
   const createAccountInstruction = SystemProgram.createAccount({

@@ -4,7 +4,7 @@ import { PublicKey } from "@solana/web3.js";
 import { readFile } from "./utils";
 
 const main = async () => {
-  const connection = getConnection();
+  const connection = await getConnection();
   const mintPubKey = readFile("mintAccountPublic.json");
   const mintAccountPublicKey = new PublicKey(mintPubKey);
   let mintAccount = await getMint(

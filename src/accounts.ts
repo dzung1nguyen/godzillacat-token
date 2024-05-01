@@ -9,7 +9,7 @@ const main = async () => {
   console.log('mintAccount', mintAccount);
 
   // Receive 1 SOL to account
-  await requestAirdrop(payerAccount.publicKey, 10);
+  // await requestAirdrop(payerAccount.publicKey, 5);
 };
 
 main();

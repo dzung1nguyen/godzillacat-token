@@ -1,13 +1,16 @@
 {
-    "name": "Godzilla Cat",
-    "symbol": "godCat",
-    "image": "https://plum-worthwhile-limpet-629.mypinata.cloud/ipfs/QmeHnRS4x7dcqMbiTbnDnjQ9gRqwRRBveeBZEKizHaDdwG",
-    "description": "godCat - The Next Meme Coin Leader On Solana\nhttps://twitter.com/GodzillaCatSol\nhttps://godzillacat.lol",
-    "extensions": {
-      "twitter": "https://twitter.com/GodzillaCatSol",
-      "telegram": "https://t.me/GodzillaCatSol"
-    },
-    "tags": [
-      "Meme"
-    ]
-  }
+  "name": "Godzilla Cat",
+  "symbol": "godCat",
+  "image": "https://plum-worthwhile-limpet-629.mypinata.cloud/ipfs/QmeHnRS4x7dcqMbiTbnDnjQ9gRqwRRBveeBZEKizHaDdwG",
+  "description": "godCat - The Next Meme Coin Leader On Solana",
+  "external_url": "https://godzillacat.lol",
+  "site": "https://godzillacat.lol",
+  "extensions": {
+    "website": "https://godzillacat.lol",
+    "twitter": "https://twitter.com/GodzillaCatSol",
+    "telegram": "https://t.me/GodzillaCatSol"
+  },
+  "tags": [
+    "Meme"
+  ]
+}
