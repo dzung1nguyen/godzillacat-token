@@ -22,8 +22,6 @@ import {
 import { getConnection, getOrCreateWallet } from "./utils/web3";
 import { decimals, metadatURL } from "./config";
 
-import { createMetadataAccountV3Instruction, PROGRAM_ID } from '@metaplex-foundation/mpl-token-metadata';
-
 let connection: Connection;
 let payerAccount: Keypair;
 let mintAccount: Keypair;
@@ -62,7 +60,6 @@ const main = async () => {
       ["website", "https://godcat.pro"],
       ["twitter", "https://twitter.com/GodzillaCatSol"],
       ["telegram", "https://t.me/GodzillaCatSol"],
-      ["email", "contact@godcat.pro"],
     ],
   };
 

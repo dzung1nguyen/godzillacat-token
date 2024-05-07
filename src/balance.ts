@@ -4,7 +4,7 @@ import { getBalance } from "./utils/web3";
 const main = async () => {
   const payerAccountPublic = await readFile("payerAccountPublic.json");
 
-  getBalance(payerAccountPublic);
+  await getBalance(payerAccountPublic);
 };
 
 main();

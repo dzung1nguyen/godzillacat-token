@@ -1,21 +1,20 @@
 import {
   AuthorityType,
   TOKEN_2022_PROGRAM_ID,
+  TOKEN_PROGRAM_ID,
   setAuthority,
 } from "@solana/spl-token";
-import { getConnection, getOrCreateWallet } from "./utils/web3";
+import { getConnection, getOrCreateWallet } from "../utils/web3";
 import { Connection, Keypair } from "@solana/web3.js";
 
 let connection: Connection;
 let payerAccount: Keypair;
 let mintAccount: Keypair;
-let ownerAccount: Keypair;
 
 const init = async () => {
   connection = await getConnection();
   payerAccount = await getOrCreateWallet("payerAccount");
   mintAccount = await getOrCreateWallet("mintAccount");
-  ownerAccount = await getOrCreateWallet("payerAccount");
 };
 
 const main = async () => {
@@ -30,13 +29,12 @@ const main = async () => {
     null,
     undefined,
     undefined,
-    TOKEN_2022_PROGRAM_ID
+    TOKEN_PROGRAM_ID
   );
 
   console.log("txhash", txhash);
 
   // Disable Freeze Account
-  /*
   let txhash2 = await setAuthority(
     connection, // connection
     payerAccount, // payer
@@ -46,11 +44,10 @@ const main = async () => {
     null,
     undefined,
     undefined,
-    TOKEN_2022_PROGRAM_ID
+    TOKEN_PROGRAM_ID
   );
 
-  console.log("txhash2", txhash);
-  */
+  console.log("txhash", txhash2);
 };
 
 main();

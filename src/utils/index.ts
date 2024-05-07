@@ -1,13 +1,12 @@
 import * as fs from "fs";
+import { env, storagePath } from "../config";
 
-export const getPath = (filename: string) => {
-  const rootPath = '/home/alex/www/godzillacat_token/src';
-
-  return `${rootPath}/storage/${filename}`;
+export const getStorageFilePath = (filename: string) => {
+  return `${storagePath}/${env}/${filename}`;
 };
 
 export const writeFileIfNotExists = (filename: string, content: any) => {
-  const filePath = getPath(filename);
+  const filePath = getStorageFilePath(filename);
   if (fs.existsSync(filePath)) {
     return false;
   }
@@ -23,7 +22,7 @@ export const writeFileIfNotExists = (filename: string, content: any) => {
 };
 
 export const readFile = (filename: string, defaultValue: any = undefined) => {
-  const filePath = getPath(filename);
+  const filePath = getStorageFilePath(filename);
   if (fs.existsSync(filePath)) {
     const fileContent = fs.readFileSync(filePath, "utf8");
     return fileContent && fileContent.length > 0

@@ -5,7 +5,7 @@ import {
   mintTo,
   transferChecked,
 } from "@solana/spl-token";
-import { getConnection, getOrCreateAccount } from "./utils/web3";
+import { getConnection, getOrCreateWallet } from "./utils/web3";
 import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import { decimals, totalSupply } from "./config";
 import { writeFileIfNotExists } from "./utils";
@@ -24,9 +24,9 @@ const totalmarketingToken = BigInt(totalSupply * 0.05);
 
 const init = async () => {
   connection = await getConnection();
-  payerAccount = await getOrCreateAccount("payerAccount");
-  mintAccount = await getOrCreateAccount("mintAccount");
-  ownerAccount = await getOrCreateAccount("payerAccount");
+  payerAccount = await getOrCreateWallet("payerAccount");
+  mintAccount = await getOrCreateWallet("mintAccount");
+  ownerAccount = await getOrCreateWallet("payerAccount");
 
   console.log("start create sourceTokenAccount");
 
@@ -60,7 +60,7 @@ const init = async () => {
 };
 
 const transfer = async (name: string, amountToken: bigint) => {
-  const keypair = await getOrCreateAccount(name);
+  const keypair = await getOrCreateWallet(name);
 
   const tokenAccount = await createAccount(
     connection,

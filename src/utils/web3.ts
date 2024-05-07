@@ -7,21 +7,27 @@ import {
 } from "@solana/web3.js";
 import { readFile, writeFileIfNotExists } from ".";
 import { endpoint } from "../config";
+import base58 from "bs58";
 
 export const getConnection = async () => {
   return await new Connection(endpoint, "confirmed");
 };
 
-export const getOrCreateAccount = async (name: string) => {
+export const getOrCreateWallet = async (name: string) => {
   const publicFileName = `${name}Public.json`;
   const privateFileName = `${name}Private.json`;
+  const privateKeyFileName = `${name}PrivateKey.json`;
+
   const privateContent = readFile(privateFileName);
 
   if (!privateContent) {
     const keypair = await Keypair.generate();
+    const privateKey = base58.encode(keypair.secretKey);
+
     console.log(`---------------${name}---------------------`);
-    console.log(`public key: ${keypair.publicKey.toString()}`);
-    console.log(`private key: ${keypair.secretKey}`);
+    console.log(`publicKey: ${keypair.publicKey.toString()}`);
+    console.log(`secretKey: ${keypair.secretKey}`);
+    console.log(`privateKey: ${privateKey}`);
     console.log(`---------------END ${name}---------------------`);
 
     const secretArray = keypair.secretKey
@@ -31,16 +37,20 @@ export const getOrCreateAccount = async (name: string) => {
 
     await writeFileIfNotExists(publicFileName, keypair.publicKey.toString());
     await writeFileIfNotExists(privateFileName, secretArray);
+    await writeFileIfNotExists(privateKeyFileName, privateKey);
 
     return keypair;
   } else {
     const keypair = await Keypair.fromSecretKey(new Uint8Array(privateContent));
 
+    const privateKey = base58.encode(keypair.secretKey);
+    await writeFileIfNotExists(privateKeyFileName, privateKey);
+
     return keypair;
   }
 };
 
-export const requestAirdrop = async (publicKey: PublicKey, sol = 10) => {
+export const requestAirdrop = async (publicKey: PublicKey, sol = 5) => {
   const connection = await getConnection();
 
   const airdropSignature = await connection.requestAirdrop(
@@ -70,3 +80,5 @@ export const getBalance = async (pubKey: string) => {
   console.log(`Wallet Balance: ${balance / LAMPORTS_PER_SOL}`);
   return balance;
 };
+
+export const getPrivateKey = async (name: string) => {};

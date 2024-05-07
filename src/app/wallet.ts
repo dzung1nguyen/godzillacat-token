@@ -1,5 +1,5 @@
-import { env } from "./config";
-import { getOrCreateWallet, requestAirdrop } from "./utils/web3";
+import { env } from "../config";
+import { getBalance, getOrCreateWallet, requestAirdrop } from "../utils/web3";
 
 const main = async () => {
   // Create a token account
@@ -11,8 +11,10 @@ const main = async () => {
 
   // Receive 1 SOL to account
   if (env !== "prod") {
-    await requestAirdrop(payerAccount.publicKey, 5);
+    await requestAirdrop(payerAccount.publicKey, 1);
   }
+
+  getBalance(payerAccount.publicKey.toString());
 };
 
 main();

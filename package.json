@@ -4,17 +4,22 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "solana-test-validator -r",
+    "dev": "cd /home/alex/solana-test-validator && solana-test-validator -r",
     "accounts": "ts-node ./src/accounts.ts",
     "balance": "ts-node ./src/balance.ts",
-    "mint": "ts-node ./src/mint.ts",
+    "mint2022": "ts-node ./src/mint2022.ts",
     "getMint": "ts-node ./src/getMint.ts",
     "createTokenAndMint": "ts-node ./src/createTokenAndMint.ts",
     "removeAuthorityMint": "ts-node ./src/removeAuthorityMint.ts"
   },
   "dependencies": {
+    "@metaplex-foundation/mpl-candy-machine": "^6.0.1",
+    "@metaplex-foundation/mpl-token-metadata": "^3.2.1",
+    "@metaplex-foundation/umi": "^0.9.1",
+    "@metaplex-foundation/umi-bundle-defaults": "^0.9.1",
     "@solana/spl-token": "^0.4.6",
     "@solana/spl-token-metadata": "^0.1.4",
-    "@solana/web3.js": "^1.91.7"
+    "@solana/web3.js": "^1.91.8",
+    "bs58": "^5.0.0"
   }
 }
